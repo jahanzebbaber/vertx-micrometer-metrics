@@ -25,6 +25,8 @@ import io.vertx.ext.unit.TestContext;
 import io.vertx.ext.unit.junit.VertxUnitRunner;
 import io.vertx.ext.web.Router;
 import io.vertx.micrometer.Label;
+import io.vertx.micrometer.Match;
+import io.vertx.micrometer.MatchType;
 import io.vertx.micrometer.MetricsDomain;
 import io.vertx.micrometer.MicrometerMetricsOptions;
 import io.vertx.micrometer.VertxPrometheusOptions;
@@ -53,6 +55,10 @@ public class PrometheusMetricsITest {
           .setStartEmbeddedServer(true)
           .setEmbeddedServerOptions(new HttpServerOptions().setPort(9090)))
         .addLabels(Label.LOCAL, Label.HTTP_PATH, Label.REMOTE)
+        .addLabelMatch(new Match()
+          .setValue(".*")
+          .setLabel(Label.HTTP_PATH.toString())
+          .setType(MatchType.REGEX))
         .setEnabled(true)));
 
     Async async = context.async();
